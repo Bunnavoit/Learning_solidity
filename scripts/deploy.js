@@ -1,12 +1,13 @@
-// scripts/deploy.js
 async function main() {
   const [deployer] = await ethers.getSigners();
+
   console.log("Deploying contracts with the account:", deployer.address);
+  console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const MyContract = await ethers.getContractFactory("MyContract");
-  const myContract = await MyContract.deploy("Hello, Hardhat!");
+  const EthLocker = await ethers.getContractFactory("EthLocker");
+  const ethLocker = await EthLocker.deploy();
 
-  console.log("MyContract deployed to:", myContract.address);
+  console.log("EthLocker address:", ethLocker.address);
 }
 
 main()
