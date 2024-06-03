@@ -1,17 +1,16 @@
-// scripts/deploy.js
+import { ethers } from "hardhat";
+
 async function main() {
-  const [deployer] = await ethers.getSigners();
-  console.log("Deploying contracts with the account:", deployer.address);
+  const EthLocker = await ethers.getContractFactory("EthLocker");
 
-  const MyContract = await ethers.getContractFactory("MyContract");
-  const myContract = await MyContract.deploy("Hello, Hardhat!");
+  const ethLocker = await EthLocker.deploy();
 
-  console.log("MyContract deployed to:", myContract.address);
+  await ethLocker.deployed();
+
+  console.log("EthLocker deployed to:", ethLocker.address);
 }
 
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

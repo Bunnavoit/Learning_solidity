@@ -1,17 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.19;
 
-// Uncomment this line to use console.log
-// import "hardhat/console.sol";
-
 contract EthLocker {
     address public owner;
-    uint256 public constant lockDuration = 40;
+    uint256 public lockDuration;
     mapping(address => uint256) public deposits;
     mapping(address => uint256) public depositTimes;
 
     constructor() {
         owner = msg.sender;
+        lockDuration = 40;
     }
 
     modifier onlyOwner() {
@@ -20,11 +18,15 @@ contract EthLocker {
     }
 
     modifier lockTimePassed() {
-        require(block.timestamp >= depositTimes[msg.sender] + lockDuration, "Lock time has not passed");
+        require(block.timestamp >= depositTimes[msg.sender] + lockDuration, "time has not passed yet");
         _;
     }
 
-    function deposit() external payable {
+    function setLockDuration(uint256 _lockDuration) external onlyOwner {
+        lockDuration = _lockDuration;
+    }
+
+    function deposit() public payable {
         require(msg.value > 0, "Deposit amount must be greater than 0");
         deposits[msg.sender] += msg.value;
         depositTimes[msg.sender] = block.timestamp;
@@ -50,8 +52,6 @@ contract EthLocker {
     }
 
     receive() external payable {
-        require(msg.value > 0, "Deposit amount must be greater than 0");
-        deposits[msg.sender] += msg.value;
-        depositTimes[msg.sender] = block.timestamp;
+        deposit();
     }
 }
