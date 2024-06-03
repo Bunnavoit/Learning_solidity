@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 contract EthLocker {
     address public owner;
-    uint256 public lockDuration;
+    uint256 public immutable lockDuration;
     mapping(address => uint256) public deposits;
     mapping(address => uint256) public depositTimes;
 
