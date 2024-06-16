@@ -3,13 +3,13 @@ pragma solidity ^0.8.19;
 
 contract EthLocker {
     address public owner;
-    uint256 public immutable lockDuration;
+    uint256 public immutable lockDuration; 
     mapping(address => uint256) public deposits;
     mapping(address => uint256) public depositTimes;
 
-    constructor() {
+    constructor(uint256 _initialLockDuration) {
         owner = msg.sender;
-        lockDuration = 40;
+        lockDuration = _initialLockDuration;
     }
 
     modifier onlyOwner() {
@@ -20,10 +20,6 @@ contract EthLocker {
     modifier lockTimePassed() {
         require(block.timestamp >= depositTimes[msg.sender] + lockDuration, "time has not passed yet");
         _;
-    }
-
-    function setLockDuration(uint256 _lockDuration) external onlyOwner {
-        lockDuration = _lockDuration;
     }
 
     function deposit() public payable {
